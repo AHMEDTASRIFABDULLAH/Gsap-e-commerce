@@ -134,7 +134,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t py-4 text-sm  ">
+        <div className="border-t py-4 text-sm border-gray-300  ">
           <p className="text-center">© 2025 Modave. All Rights Reserved.</p>
         </div>
       </div>

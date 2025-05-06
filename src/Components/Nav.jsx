@@ -21,7 +21,7 @@ const Nav = () => {
           isSticky ? "fixed top-0 shadow-md" : "relative"
         }`}
       >
-        <div className=" shadow py-2 sm:py-6 px-4 sm:px-6 flex justify-between items-center">
+        <div className=" shadow py-2 sm:py-3 px-4 sm:px-6 flex justify-between items-center">
           <div className="flex items-center   gap-4">
             <AiOutlineMenu className="text-[22px] block sm:hidden  " />
 

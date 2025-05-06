@@ -1,15 +1,12 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import Nav from "../Components/Nav";
 import Carousel from "../Components/Carousel";
 import Card from "../Components/Card";
 import Container from "../Components/Container";
-import Footer from "../Components/Footer";
+import Explore from "../Components/Explore";
+import Review from "../Components/Review";
 
 const Home = () => {
   return (
     <>
-      <Nav />
       <Carousel />
       <Container>
         <div className="pb-3 sm:pb-6">
@@ -25,8 +22,9 @@ const Home = () => {
             <Card />
           </div>
         </div>
+        <Explore />
+        <Review />
       </Container>
-      <Footer/>
     </>
   );
 };

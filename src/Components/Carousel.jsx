@@ -8,7 +8,7 @@ const Carousel = () => {
   return (
     <Swiper
       modules={[Navigation, Pagination, Autoplay]}
-      spaceBetween={20}
+      spaceBetween={0}
       pagination={{ clickable: true }}
       autoplay={{ delay: 3000 }}
       loop
@@ -26,9 +26,9 @@ const Carousel = () => {
                 Welcome to Trendora
               </h2>
               <p className="text-sm sm:text-base md:text-lg text-white mb-4 md:mb-6">
-              Fresh styles just in! Elevate your look.
+                Fresh styles just in! Elevate your look.
               </p>
-              <button className="bg-red-600 text-white px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 rounded hover:bg-red-700 transition">
+              <button className="bg-black text-white px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 rounded hover:bg-gray-900 transition cursor-pointer">
                 Shop Now
               </button>
             </div>
