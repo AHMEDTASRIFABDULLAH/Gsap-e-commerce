@@ -3,6 +3,7 @@ import Card from "../Components/Card";
 import Container from "../Components/Container";
 import Explore from "../Components/Explore";
 import Review from "../Components/Review";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
@@ -14,7 +15,9 @@ const Home = () => {
             Our Collections
           </h1>
           <div className="grid grid-cols-2 gap-3 md:gap-6 md:grid-cols-4">
-            <Card />
+            <Link to="/details">
+              <Card />
+            </Link>
             <Card />
             <Card />
             <Card />
