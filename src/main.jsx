@@ -14,6 +14,8 @@ import Dashboard from "./Pages/Dashboard";
 import AddProduct from "./Pages/AddProduct";
 import Oders from "./Pages/Oders";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Admin from "./Pages/Admin";
+import AuthProvider from "./Hooks/AuthProvider";
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
@@ -29,7 +31,7 @@ const router = createBrowserRouter([
         element: <OrderForm />,
       },
       {
-        path: "/details",
+        path: "/details/:id",
         element: <Details />,
       },
       {
@@ -43,6 +45,10 @@ const router = createBrowserRouter([
       {
         path: "/checkout",
         element: <OrderForm />,
+      },
+      {
+        path: "/admin",
+        element: <Admin />,
       },
     ],
   },
@@ -66,7 +72,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </QueryClientProvider>
   </StrictMode>
 );

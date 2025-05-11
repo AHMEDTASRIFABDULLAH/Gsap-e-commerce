@@ -2,7 +2,19 @@ import React from "react";
 import Card from "../Components/Card";
 import Container from "../Components/Container";
 import banner from "../assets/cart/b2.jpg";
+import useAxiosPublic from "../Hooks/useAxiosPublic";
+import { useQuery } from "@tanstack/react-query";
+import Loder from "../Components/Loder";
 const Products = () => {
+  const axiosPublic = useAxiosPublic();
+  const { data: homeProducts, isLoading } = useQuery({
+    queryKey: ["products"],
+    queryFn: async () => {
+      const { data } = await axiosPublic.get(`/products`);
+      return data;
+    },
+  });
+  if (isLoading) return <Loder />;
   return (
     <>
       <div className=" mt-5">
@@ -45,14 +57,9 @@ const Products = () => {
 
         <Container>
           <div className="  grid grid-cols-2 gap-3 md:gap-6 md:grid-cols-4">
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
+            {homeProducts?.map((data) => (
+              <Card key={data._id} data={data} />
+            ))}
           </div>
         </Container>
         <div className="flex justify-center items-center px-4 py-6">

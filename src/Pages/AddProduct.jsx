@@ -9,7 +9,6 @@ const AddProduct = () => {
     description: "",
     price: "",
     discountPrice: "",
-    size: "",
     color: "",
     image: null,
   });
@@ -27,16 +26,62 @@ const AddProduct = () => {
     e.preventDefault();
 
     try {
-      await axiosPublic.post(`/add-produtcs`, formData);
+      // Step 1: Upload Image to Cloudinary
+      const imageData = new FormData();
+      imageData.append("file", formData.image);
+      imageData.append("upload_preset", "unsigned_preset");
+      imageData.append("cloud_name", "dg2gixvgw");
 
-      alert("data added");
+      const cloudinaryRes = await fetch(
+        "https://api.cloudinary.com/v1_1/dg2gixvgw/image/upload",
+        {
+          method: "POST",
+          body: imageData,
+        }
+      );
+
+      const cloudinaryData = await cloudinaryRes.json();
+      const imageUrl = cloudinaryData.secure_url;
+
+      if (!imageUrl) {
+        alert("Image upload failed!");
+        return;
+      }
+
+      // Step 2: Prepare Product Data
+      const productData = {
+        title: formData.title,
+        description: formData.description,
+        price: formData.price,
+        discountPrice: formData.discountPrice,
+        size: formData.size,
+        color: formData.color,
+        image: imageUrl, // Cloudinary image URL
+      };
+
+      // Step 3: Send to your backend
+      await axiosPublic.post("/add-produtcs", productData);
+
+      alert("Product added successfully!");
+
+      // Optional: Reset form
+      setFormData({
+        title: "",
+        description: "",
+        price: "",
+        discountPrice: "",
+        size: "",
+        color: "",
+        image: null,
+      });
     } catch (error) {
-      alert("erros");
+      console.error(error);
+      alert("Error adding product.");
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-2xl shadow-md">
+    <div className="max-w-4xl mx-auto sm:mt-6 p-6 bg-white rounded-2xl shadow-sm">
       <h2 className="text-2xl font-bold mb-6 text-gray-800">Add New Product</h2>
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -78,26 +123,6 @@ const AddProduct = () => {
             />
           </div>
           <div>
-            <label className="block mb-1 text-sm font-medium">Size</label>
-            <select
-              name="size"
-              value={formData.size}
-              onChange={handleChange}
-              className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300"
-              required
-            >
-              <option value="" disabled>
-                Select a size
-              </option>
-              <option value="XS">XS</option>
-              <option value="S">S</option>
-              <option value="M">M</option>
-              <option value="L">L</option>
-              <option value="XL">XL</option>
-              <option value="XXL">XXL</option>
-            </select>
-          </div>
-          <div>
             <label className="block mb-1 text-sm font-medium">Color</label>
             <input
               type="text"
@@ -109,14 +134,29 @@ const AddProduct = () => {
             />
           </div>
           <div>
-            <label className="block mb-1 text-sm font-medium">Image</label>
-            <input
-              type="file"
-              name="image"
-              accept="image/*"
-              onChange={handleChange}
-              className="w-full border rounded-lg px-3 py-2 bg-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200"
-            />
+            <div className="relative">
+              <input
+                type="file"
+                name="image"
+                accept="image/*"
+                onChange={handleChange}
+                id="imageUpload"
+                className="hidden"
+                required
+              />
+              <label
+                htmlFor="imageUpload"
+                className="inline-block cursor-pointer px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition"
+              >
+                Upload Image
+              </label>
+              {formData.image && (
+                <p className="text-sm text-gray-600 mt-1">
+                  Selected:{" "}
+                  <span className="font-medium">{formData.image.name}</span>
+                </p>
+              )}
+            </div>
           </div>
         </div>
 
@@ -134,7 +174,7 @@ const AddProduct = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+          className="w-full bg-black text-white py-3 hover:bg-gray-900 rounded-lg font-semibold transition"
         >
           Add Product
         </button>

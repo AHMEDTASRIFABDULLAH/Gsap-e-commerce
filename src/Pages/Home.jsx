@@ -4,8 +4,20 @@ import Container from "../Components/Container";
 import Explore from "../Components/Explore";
 import Review from "../Components/Review";
 import { Link } from "react-router-dom";
+import useAxiosPublic from "../Hooks/useAxiosPublic";
+import { useQuery } from "@tanstack/react-query";
+import Loder from "../Components/Loder";
 
 const Home = () => {
+  const axiosPublic = useAxiosPublic();
+  const { data: homeProducts, isLoading } = useQuery({
+    queryKey: ["homeProducts"],
+    queryFn: async () => {
+      const { data } = await axiosPublic.get(`/home-products`);
+      return data;
+    },
+  });
+  if (isLoading) return <Loder />;
   return (
     <>
       <Carousel />
@@ -15,14 +27,9 @@ const Home = () => {
             Our Collections
           </h1>
           <div className="grid grid-cols-2 gap-3 md:gap-6 md:grid-cols-4">
-            <Link to="/details">
-              <Card />
-            </Link>
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
+            {homeProducts?.map((data) => (
+              <Card key={data._id} data={data} />
+            ))}
           </div>
         </div>
         <Explore />

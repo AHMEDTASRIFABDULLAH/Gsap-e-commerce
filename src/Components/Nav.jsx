@@ -2,15 +2,21 @@ import { FaShoppingCart } from "react-icons/fa";
 import { IoClose, IoSearchSharp } from "react-icons/io5";
 import { AiOutlineMenu } from "react-icons/ai";
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../Hooks/AuthProvider";
 const Nav = () => {
   const [isOpen, setIsOpen] = useState(false);
+
   const location = useLocation();
+
+  const { isAdmin } = useContext(AuthContext);
   const menuItems = [
     { name: "Home", path: "/" },
     { name: "Products", path: "/products" },
     { name: "About", path: "/about" },
+    isAdmin === true && { name: "Dashboard", path: "/dashboard/orders" },
   ];
+
   return (
     <>
       {/* Sidebar Panel */}
@@ -29,13 +35,13 @@ const Nav = () => {
 
         {/* Menu Links */}
         <div className="flex flex-col gap-4 pl-4 pt-10">
-          {menuItems.map((item) => {
+          {menuItems.filter(Boolean).map((item) => {
             const isActive = location.pathname === item.path;
 
             return (
               <Link
                 to={item.path}
-                key={item.name}
+                key={item.path}
                 onClick={() => setIsOpen(false)}
               >
                 <h1
@@ -93,6 +99,17 @@ const Nav = () => {
                 About
               </h1>
             </Link>
+            {isAdmin === true && (
+              <Link to="/dashboard/orders">
+                <h1
+                  className={`font-bold text-[14px] cursor-pointer relative pb-1 ${
+                    location.pathname === "/about" ? "text-orange-700" : ""
+                  }`}
+                >
+                  Dashboard
+                </h1>
+              </Link>
+            )}
           </div>
 
           <div className="flex justify-between items-center gap-4">
