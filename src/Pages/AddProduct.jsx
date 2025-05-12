@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useAxiosPublic from "../Hooks/useAxiosPublic";
+import Swal from "sweetalert2";
 
 const AddProduct = () => {
   const axiosPublic = useAxiosPublic();
@@ -61,9 +62,6 @@ const AddProduct = () => {
 
       // Step 3: Send to your backend
       await axiosPublic.post("/add-produtcs", productData);
-
-      alert("Product added successfully!");
-
       // Optional: Reset form
       setFormData({
         title: "",
@@ -73,6 +71,13 @@ const AddProduct = () => {
         size: "",
         color: "",
         image: null,
+      });
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Product added  successfully",
+        showConfirmButton: false,
+        timer: 1500,
       });
     } catch (error) {
       console.error(error);
@@ -93,7 +98,8 @@ const AddProduct = () => {
               value={formData.title}
               onChange={handleChange}
               className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300"
-              placeholder="Product title"
+              placeholder=" Max length 25 letters"
+              maxLength={25}
               required
             />
           </div>
@@ -174,7 +180,7 @@ const AddProduct = () => {
 
         <button
           type="submit"
-          className="w-full bg-black text-white py-3 hover:bg-gray-900 rounded-lg font-semibold transition"
+          className="w-full cursor-pointer bg-black text-white py-3 hover:bg-gray-900 rounded-lg font-semibold transition"
         >
           Add Product
         </button>

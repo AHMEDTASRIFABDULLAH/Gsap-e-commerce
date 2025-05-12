@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Hooks/AuthProvider";
 
@@ -14,8 +14,9 @@ const Admin = () => {
     const Pass = import.meta.env.VITE_ADMIN_PASS;
 
     if (email === Email && pass === Pass) {
-      navigate("/dashboard/orders");
+      sessionStorage.setItem("isAdmin", "true");
       setAdmin(true);
+      navigate("/dashboard/orders");
     } else {
       setError("Invalid email or password");
     }
@@ -57,7 +58,7 @@ const Admin = () => {
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
           <button
             type="submit"
-            className="w-full py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition duration-300"
+            className="w-full py-3 cursor-pointer font-semibold bg-black text-white rounded-xl hover:bg-gray-800 transition duration-300"
           >
             Login
           </button>

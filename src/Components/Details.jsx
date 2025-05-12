@@ -29,7 +29,7 @@ const Details = () => {
         color: data?.color,
         total: data?.price,
       };
-      setData(selectedData);
+      localStorage.setItem("checkoutData", JSON.stringify(selectedData));
     }
   }, [size, quantity, data?.color]);
   if (isLoading) return <Loder />;

@@ -1,37 +1,84 @@
-import React, { useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import Container from "./Container";
 import { FaCheckCircle } from "react-icons/fa";
-import { AuthContext } from "../Hooks/AuthProvider";
 import useAxiosPublic from "../Hooks/useAxiosPublic";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import Swal from "sweetalert2";
+
 const OrderForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const axiosPublic = useAxiosPublic();
-  const { details } = useContext(AuthContext);
-  const [oder, setoder] = useState({
+
+  const [details, setDetails] = useState(null);
+
+  useEffect(() => {
+    const savedData = localStorage.getItem("checkoutData");
+    if (savedData) {
+      setDetails(JSON.parse(savedData));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (location.pathname !== "/checkout") {
+      localStorage.removeItem("checkoutData");
+    }
+  }, [location.pathname]);
+
+  const [order, setOrder] = useState({
     name: "",
     email: "",
     phone: "",
-    color: details?.color,
-    quantity: details?.quantity,
-    total: details?.total,
-    size: details?.size,
+    address: "",
+    color: "",
+    quantity: "",
+    total: "",
+    size: "",
     date: new Date().toISOString(),
   });
 
+  // update order once details are loaded
+  useEffect(() => {
+    if (details) {
+      setOrder((prev) => ({
+        ...prev,
+        color: details.color,
+        quantity: details.quantity,
+        total: details.total,
+        size: details.size,
+      }));
+    }
+  }, [details]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setoder({
-      ...oder,
+    setOrder({
+      ...order,
       [name]: value,
     });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const phonePattern = /^01\d{9}$/;
+    if (!phonePattern.test(order.phone)) {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid Phone Number",
+        text: "Phone number must start with 01 and be exactly 11 digits.",
+      });
+      return;
+    }
     try {
-      await axiosPublic.post("/add-orders", oder);
-      alert("Order submitted successfully");
+      await axiosPublic.post("/add-orders", order);
       navigate("/");
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Order submitted successfully",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     } catch (error) {
       alert("Error submitting order:", error);
     }
@@ -45,102 +92,72 @@ const OrderForm = () => {
             Place Your Order
           </h2>
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Grid Inputs */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  value={oder.name}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={oder.email}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Phone Number
-                </label>
-                <input
-                  type="number"
-                  name="phone"
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
-                  placeholder="Enter your phone number"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Address
-                </label>
-                <input
-                  type="text"
-                  name="address"
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
-                  placeholder="Enter your address"
-                  required
-                />
-              </div>
+              <input
+                type="text"
+                name="name"
+                value={order.name}
+                onChange={handleChange}
+                required
+                placeholder="Your Name"
+                className="border rounded-lg px-4 py-2"
+              />
+              <input
+                type="email"
+                name="email"
+                value={order.email}
+                onChange={handleChange}
+                required
+                placeholder="Your Email"
+                className="border rounded-lg px-4 py-2"
+              />
+              <input
+                type="number"
+                name="phone"
+                value={order.phone}
+                onChange={handleChange}
+                required
+                placeholder="Phone Number"
+                className="border rounded-lg px-4 py-2"
+              />
+              <input
+                type="text"
+                name="address"
+                value={order.address}
+                onChange={handleChange}
+                required
+                placeholder="Address"
+                className="border rounded-lg px-4 py-2"
+              />
             </div>
-
-            {/* Payment Method */}
             <div className="flex items-center gap-2 mt-4">
               <FaCheckCircle className="text-green-500 text-lg" />
               <span className="text-base font-medium text-gray-700">
                 Cash on Delivery
               </span>
             </div>
-
-            {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-black text-white py-3 rounded-lg font-semibold text-base hover:bg-gray-900 cursor-pointer transition-transform transform hover:scale-103 active:scale-95"
+              className="w-full cursor-pointer bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-900"
             >
               Order
             </button>
-
-            {/* Summary Info */}
-            <div className="text-center pt-4 border-t border-gray-200">
-              <p className="text-sm text-gray-600">
-                Color:{" "}
-                <span className="font-medium text-gray-800">
-                  {details?.color}
-                </span>
-              </p>
-              <p className="text-sm text-gray-600">
-                Size:{" "}
-                <span className="font-medium text-gray-800">
-                  {details?.size}
-                </span>
-              </p>
-              <p className="text-sm text-gray-600">
-                Quantity:{" "}
-                <span className="font-medium text-gray-800">
-                  {details?.quantity}
-                </span>
-              </p>
-              <p className="text-lg font-bold text-gray-800 mt-2">
-                Total: ৳{details?.total}
-              </p>
-            </div>
+            {details && (
+              <div className="text-center pt-4 border-t border-gray-200">
+                <p>
+                  Color: <strong>{details.color}</strong>
+                </p>
+                <p>
+                  Size: <strong>{details.size}</strong>
+                </p>
+                <p>
+                  Quantity: <strong>{details.quantity}</strong>
+                </p>
+                <p>
+                  Total: <strong>৳{details.total}</strong>
+                </p>
+              </div>
+            )}
           </form>
         </div>
       </div>

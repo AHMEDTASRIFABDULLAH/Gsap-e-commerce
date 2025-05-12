@@ -3,6 +3,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { Link } from "react-router-dom";
 
 const Carousel = () => {
   return (
@@ -28,9 +29,11 @@ const Carousel = () => {
               <p className="text-sm sm:text-base md:text-lg text-white mb-4 md:mb-6">
                 Fresh styles just in! Elevate your look.
               </p>
-              <button className="bg-black text-white px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 rounded hover:bg-gray-900 transition cursor-pointer">
-                Shop Now
-              </button>
+              <Link to="/products">
+                <button className="bg-black text-white px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 rounded hover:bg-gray-900 transition cursor-pointer">
+                  Shop Now
+                </button>
+              </Link>
             </div>
           </div>
         </SwiperSlide>

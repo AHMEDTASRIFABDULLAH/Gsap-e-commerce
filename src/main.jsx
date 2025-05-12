@@ -2,9 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import Root from "./Pages/Root";
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
 import Home from "./Pages/Home";
 import OrderForm from "./Components/OrderForm";
 import Details from "./Components/Details";
@@ -16,10 +14,13 @@ import Oders from "./Pages/Oders";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Admin from "./Pages/Admin";
 import AuthProvider from "./Hooks/AuthProvider";
+import Err from "./Pages/Err";
+import AdminChecker from "./Pages/AdminChecker";
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
     path: "/",
+    errorElement: <Err />,
     element: <Root />,
     children: [
       {
@@ -54,16 +55,29 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <Dashboard />,
+    errorElement: <Err />,
+    element: (
+      <AdminChecker>
+        <Dashboard />
+      </AdminChecker>
+    ),
     children: [
       {
         index: true,
         path: "/dashboard/orders",
-        element: <Oders />,
+        element: (
+          <AdminChecker>
+            <Oders />
+          </AdminChecker>
+        ),
       },
       {
         path: "/dashboard/add-product",
-        element: <AddProduct />,
+        element: (
+          <AdminChecker>
+            <AddProduct />
+          </AdminChecker>
+        ),
       },
     ],
   },
