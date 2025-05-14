@@ -33,6 +33,7 @@ const Products = () => {
   const filteredProducts = homeProducts?.filter((product) =>
     product.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  window.scrollTo(0, 0);
   return (
     <>
       <div className="mt-5">
@@ -104,12 +105,6 @@ const Products = () => {
             )}
           </div>
         </Container>
-
-        {/* <div className="flex justify-center items-center px-4 py-6">
-          <button className="bg-black text-white px-8 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 font-medium transition-all duration-300 ease-in-out hover:bg-gray-900 hover:scale-105 active:scale-95 rounded-md cursor-pointer">
-            Load more
-          </button>
-        </div> */}
       </div>
     </>
   );

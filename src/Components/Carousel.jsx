@@ -18,7 +18,7 @@ const Carousel = () => {
         <SwiperSlide key={num}>
           <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px]">
             <img
-              src={`/src/assets/${num}.jpg`}
+              src={`/images/${num}.jpg`}
               alt={`Slide ${num}`}
               className="w-full h-full object-fill sm:object-cover"
             />

@@ -58,6 +58,7 @@ const AddProduct = () => {
         size: formData.size,
         color: formData.color,
         image: imageUrl, // Cloudinary image URL
+        createdAt: new Date(),
       };
 
       // Step 3: Send to your backend
@@ -84,7 +85,7 @@ const AddProduct = () => {
       alert("Error adding product.");
     }
   };
-
+  window.scrollTo(0, 0);
   return (
     <div className="max-w-4xl mx-auto sm:mt-6 p-6 bg-white rounded-2xl shadow-sm">
       <h2 className="text-2xl font-bold mb-6 text-gray-800">Add New Product</h2>
@@ -104,7 +105,10 @@ const AddProduct = () => {
             />
           </div>
           <div>
-            <label className="block mb-1 text-sm font-medium">Price ($)</label>
+            <label className="block mb-1 text-sm font-medium">
+              {" "}
+              Discount Price ($)
+            </label>
             <input
               type="number"
               name="price"
@@ -116,9 +120,7 @@ const AddProduct = () => {
             />
           </div>
           <div>
-            <label className="block mb-1 text-sm font-medium">
-              Discount Price ($)
-            </label>
+            <label className="block mb-1 text-sm font-medium">Price ($)</label>
             <input
               type="number"
               name="discountPrice"

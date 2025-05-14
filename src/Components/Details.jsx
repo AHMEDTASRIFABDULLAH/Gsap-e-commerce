@@ -33,7 +33,7 @@ const Details = () => {
     }
   }, [size, quantity, data?.color]);
   if (isLoading) return <Loder />;
-
+  window.scrollTo(0, 0);
   return (
     <Container>
       <div className="relative top-18 mb-8 sm:px-10 sm:py-8 bg-white">

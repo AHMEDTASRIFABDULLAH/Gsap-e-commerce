@@ -157,7 +157,7 @@ const Oders = () => {
   };
 
   if (isLoading) return <Loder />;
-
+  window.scrollTo(0, 0);
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto">

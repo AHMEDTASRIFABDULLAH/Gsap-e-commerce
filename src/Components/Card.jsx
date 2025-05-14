@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../Hooks/AuthProvider";
 import useAxiosPublic from "../Hooks/useAxiosPublic";
 import Swal from "sweetalert2";
+import { MdDeleteForever } from "react-icons/md";
 const Card = ({ data, refetch }) => {
   const { isAdmin } = useContext(AuthContext);
   const axiosPublic = useAxiosPublic();
@@ -35,7 +36,6 @@ const Card = ({ data, refetch }) => {
           {" "}
           <img className="object-cover" src={data?.image} alt="" />
           <h1 className="text-black font-semibold pt-1 text-center text-[12px] sm:text-[16px]">
-            {/* Mens Premium Designer Edition T Shirt */}
             {data?.title}
           </h1>
           <div className="flex items-center gap-2 sm:gap-4 py-1 justify-center">
@@ -62,7 +62,7 @@ const Card = ({ data, refetch }) => {
             className="bg-red-600 mt-2 flex justify-center w-full cursor-pointer"
           >
             <div className="flex justify-between gap-3 items-center py-1">
-              <FaCartShopping className="text-white cursor-pointer" />{" "}
+              <MdDeleteForever className="text-white text-xl cursor-pointer" />{" "}
               <h1 className="text-white font-semibold cursor-pointer">
                 Delete
               </h1>

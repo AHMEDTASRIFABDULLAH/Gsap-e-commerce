@@ -33,6 +33,7 @@ const Home = () => {
   const filteredProducts = homeProducts?.filter((product) =>
     product.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  window.scrollTo(0, 0);
   return (
     <>
       <Carousel />

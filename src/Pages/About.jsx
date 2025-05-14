@@ -2,6 +2,7 @@ import React from "react";
 import aboutImg from "../assets/about_us_img_11.png";
 import Container from "../Components/Container";
 const About = () => {
+  window.scrollTo(0, 0);
   return (
     <Container>
       <div className="relative top-18 min-h-screen bg-white text-gray-800 mb-20">
